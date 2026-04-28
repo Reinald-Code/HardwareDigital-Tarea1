@@ -38,7 +38,7 @@ El sistema utiliza un Arduino UNO para monitorear la humedad del suelo y activar
 
 2. **Clonar el Repositorio:**
    \`\`\`bash
-   git clone https://github.com/TU_USUARIO/ISF215-Control-Riego.git
+   git clone https://github.com/Reinald-Code/HardwareDigital-Tarea1.git
    \`\`\`
 
 3. **Compilación y Subida:**

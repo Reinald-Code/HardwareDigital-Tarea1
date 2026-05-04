@@ -48,11 +48,19 @@ void loop() {
   delay(100); 
 }
 
-// --- INTEGRANTE 2: Módulo Analógico ---
+// --- INTEGRANTE 2: Módulo Analógico para YL-69 / FC-28 ---
 void leerHumedad() {
-  // Leer y mapear valor de 0-1023 a 0-100%
-}
+  // Leer el valor analógico crudo del sensor
+  int valorSensor = analogRead(PIN_SENSOR_HUMEDAD);
 
+  // Mapear el valor usando lógica INVERTIDA
+  // 1023 (Tierra seca) -> 0% de humedad
+  // 0 (Sumergido en agua) -> 100% de humedad
+  humedadPorcentaje = map(valorSensor, 1023, 0, 0, 100);
+
+  // Se limita el valor para evitar porcentajes negativos o mayores a 100%
+  humedadPorcentaje = constrain(humedadPorcentaje, 0, 100);
+}
 // --- INTEGRANTE 3: Módulo Digital y Debouncing ---
 void leerBoton() {
   // Cambiar entre modo manual y automático con debouncing

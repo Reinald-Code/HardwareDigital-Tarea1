@@ -96,8 +96,54 @@ void evaluarUmbral() {
 
 // --- INTEGRANTE 5: Interfaz y Actuadores ---z
 void actualizarPantalla() {
-  // 1. Control del L298N:
-  //    Si bombaActivada: digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); analogWrite(ENA, 200);
-  //    Si no: analogWrite(ENA, 0);
-  // 2. Mostrar datos en el LCD
+
+  // =====================================================
+  // 1. Control del L298N
+  // =====================================================
+
+  if (bombaActivada) {
+
+    // Activar motor
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+
+    // Velocidad mediante PWM
+    analogWrite(ENA, 200);
+
+  } else {
+
+    // Detener motor
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+
+    analogWrite(ENA, 0);
+  }
+
+  // =====================================================
+  // 2. Mostrar datos en pantalla LCD
+  // =====================================================
+
+  lcd.clear();
+
+  // Línea superior
+  lcd.setCursor(0, 0);
+  lcd.print("Humedad:");
+  lcd.print(humedadPorcentaje);
+  lcd.print("%");
+
+  // Línea inferior
+  lcd.setCursor(0, 1);
+
+  if (modoManual) {
+    lcd.print("Modo: MANUAL");
+  } else {
+    lcd.print("Modo: AUTO");
+  }
+
+  // Estado de la bomba
+  if (bombaActivada) {
+    lcd.print(" ON");
+  } else {
+    lcd.print(" OFF");
+  }
 }

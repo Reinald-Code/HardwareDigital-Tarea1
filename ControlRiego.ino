@@ -52,7 +52,7 @@ void loop() {
 // --- INTEGRANTE 2: Módulo Analógico para YL-69 / FC-28 ---
 void leerHumedad() {
   // Leer y mapear valor de 0-1023 a 0-100%
-}
+
   // Leer el valor analógico crudo del sensor
   int valorSensor = analogRead(PIN_SENSOR_HUMEDAD);
 

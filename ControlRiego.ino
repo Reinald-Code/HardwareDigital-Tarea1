@@ -58,9 +58,29 @@ void leerBoton() {
   // Cambiar entre modo manual y automático con debouncing
 }
 
-// --- INTEGRANTE 4: Lógica y Umbral ---
+/**
+ * --- INTEGRANTE 4: Lógica y Umbral ---
+ * @brief Decide el estado de la bomba según el nivel de humedad y el modo de operación.
+ * Si la humedad cae por debajo del 40%, se marca la bomba para ser activada.
+ */
 void evaluarUmbral() {
-  // Lógica de activación: si humedad < X% -> bombaActivada = true
+  // Solo aplicamos la lógica automática si el Modo Manual está desactivado
+  if (modoManual == false) {
+    
+    if (humedadPorcentaje < 40) {
+      // Si hay poca humedad, activamos la bomba
+      bombaActivada = true; 
+    } 
+    else if (humedadPorcentaje > 60) {
+      // HISTERESIS: Si ya llegó al 60%, dejamos de regar para no inundar
+      bombaActivada = false;
+    }
+    // Si está entre 40 y 60, mantiene el estado anterior (evita que la bomba prenda/apague muy rápido)
+    
+  } else {
+    // Si estamos en Modo Manual/OFF, la bomba siempre debe estar apagada por seguridad
+    bombaActivada = false;
+  }
 }
 
 // --- INTEGRANTE 5: Interfaz y Actuadores ---

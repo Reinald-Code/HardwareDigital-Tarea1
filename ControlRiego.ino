@@ -94,7 +94,7 @@ void evaluarUmbral() {
   }
 }
 
-// --- INTEGRANTE 5: Interfaz y Actuadores ---
+// --- INTEGRANTE 5: Interfaz y Actuadores ---z
 void actualizarPantalla() {
 
   // =====================================================

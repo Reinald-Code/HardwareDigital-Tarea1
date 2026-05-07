@@ -24,7 +24,7 @@ bool bombaActivada = false;
 
 void setup() {
   Serial.begin(9600);
-  
+
   // Configuración de pines
   pinMode(PIN_SENSOR_HUMEDAD, INPUT);
   pinMode(PIN_BOTON, INPUT_PULLUP);
@@ -36,7 +36,7 @@ void setup() {
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
   analogWrite(ENA, 0);
-  
+
   // Integrante 5: Iniciar LCD aquí
 }
 
@@ -49,10 +49,21 @@ void loop() {
 }
 
 // --- INTEGRANTE 2: Módulo Analógico ---
+// --- INTEGRANTE 2: Módulo Analógico para YL-69 / FC-28 ---
 void leerHumedad() {
   // Leer y mapear valor de 0-1023 a 0-100%
 }
+  // Leer el valor analógico crudo del sensor
+  int valorSensor = analogRead(PIN_SENSOR_HUMEDAD);
 
+  // Mapear el valor usando lógica INVERTIDA
+  // 1023 (Tierra seca) -> 0% de humedad
+  // 0 (Sumergido en agua) -> 100% de humedad
+  humedadPorcentaje = map(valorSensor, 1023, 0, 0, 100);
+
+  // Se limita el valor para evitar porcentajes negativos o mayores a 100%
+  humedadPorcentaje = constrain(humedadPorcentaje, 0, 100);
+}
 // --- INTEGRANTE 3: Módulo Digital y Debouncing ---
 void leerBoton() {
   // Cambiar entre modo manual y automático con debouncing
@@ -83,7 +94,7 @@ void evaluarUmbral() {
   }
 }
 
-// --- INTEGRANTE 5: Interfaz y Actuadores ---
+// --- INTEGRANTE 5: Interfaz y Actuadores ---z
 void actualizarPantalla() {
   // 1. Control del L298N:
   //    Si bombaActivada: digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); analogWrite(ENA, 200);

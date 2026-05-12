@@ -21,6 +21,10 @@ LiquidCrystal lcd(12, 11, 6, 5, 4, 3);
 int humedadPorcentaje = 0;
 bool modoManual = false;
 bool bombaActivada = false;
+bool estadoBotonAnterior = HIGH;
+bool estadoBotonEstable = HIGH;
+unsigned long ultimoCambioBoton = 0;
+const unsigned long DEBOUNCE_MS = 50;
 
 void setup() {
   Serial.begin(9600);
@@ -56,6 +60,23 @@ void leerHumedad() {
 // --- INTEGRANTE 3: Módulo Digital y Debouncing ---
 void leerBoton() {
   // Cambiar entre modo manual y automático con debouncing
+  bool lecturaBoton = digitalRead(PIN_BOTON);
+
+  if (lecturaBoton != estadoBotonAnterior) {
+    ultimoCambioBoton = millis();
+  }
+
+  if ((millis() - ultimoCambioBoton) > DEBOUNCE_MS) {
+    if (lecturaBoton != estadoBotonEstable) {
+      estadoBotonEstable = lecturaBoton;
+
+      if (estadoBotonEstable == LOW) {
+        modoManual = !modoManual;
+      }
+    }
+  }
+
+  estadoBotonAnterior = lecturaBoton;
 }
 
 // --- INTEGRANTE 4: Lógica y Umbral ---

@@ -42,6 +42,7 @@ void setup() {
   analogWrite(ENA, 0);
 
   // Integrante 5: Iniciar LCD aquí
+  lcd.begin(16, 2);
 }
 
 void loop() {
@@ -63,7 +64,7 @@ void leerHumedad() {
   // Mapear el valor usando lógica INVERTIDA
   // 1023 (Tierra seca) -> 0% de humedad
   // 0 (Sumergido en agua) -> 100% de humedad
-  humedadPorcentaje = map(valorSensor, 1023, 0, 0, 100);
+  humedadPorcentaje = map(valorSensor, 1023, 100, 0, 0);
 
   // Se limita el valor para evitar porcentajes negativos o mayores a 100%
   humedadPorcentaje = constrain(humedadPorcentaje, 0, 100);
@@ -115,7 +116,7 @@ void evaluarUmbral() {
   }
 }
 
-// --- INTEGRANTE 5: Interfaz y Actuadores ---z
+// --- INTEGRANTE 5: Interfaz y Actuadores ---
 void actualizarPantalla() {
 
   // =====================================================
@@ -141,30 +142,27 @@ void actualizarPantalla() {
   }
 
   // =====================================================
-  // 2. Mostrar datos en pantalla LCD
+  // 2. Mostrar datos en pantalla LCD (Corregido sin lcd.clear)
   // =====================================================
 
-  lcd.clear();
-
-  // Línea superior
+  // Fila superior: Se agregan espacios al final para borrar números viejos sin parpadeo
   lcd.setCursor(0, 0);
-  lcd.print("Humedad:");
+  lcd.print(F("Humedad: "));
   lcd.print(humedadPorcentaje);
-  lcd.print("%");
+  lcd.print(F("%   ")); 
 
-  // Línea inferior
+  // Fila inferior: Se ordenan los textos en posiciones fijas
   lcd.setCursor(0, 1);
-
   if (modoManual) {
-    lcd.print("Modo: MANUAL");
+    lcd.print(F("Modo: MANUAL"));
   } else {
-    lcd.print("Modo: AUTO");
+    lcd.print(F("Modo: AUTO  "));
   }
 
-  // Estado de la bomba
+  // El estado de la bomba se imprime al lado para que no choque con el texto del modo
   if (bombaActivada) {
-    lcd.print(" ON");
+    lcd.print(F(" ON "));
   } else {
-    lcd.print(" OFF");
+    lcd.print(F(" OFF"));
   }
 }

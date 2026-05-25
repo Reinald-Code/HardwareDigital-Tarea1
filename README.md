@@ -6,10 +6,10 @@ El sistema utiliza un Arduino UNO para monitorear la humedad del suelo y activar
 
 ## 👥 Integrantes del Equipo
 * [Vicente Saa] - *Estructura Base*
-* [Nombre 2 (Por definir)] - *Módulo Analógico (Sensor)*
-* [Nombre 3 (Por definir)] - *Módulo Digital (Botón)*
-* [Nombre 4 (Por definir)] - *Lógica y Umbrales*
-* [Nombre 5 (Por definir)] - *Interfaz y Actuadores (LCD y L298N)*
+* [Francisca Hernandez] - *Módulo Analógico (Sensor)*
+* [Wilson Jara] - *Módulo Digital (Botón)*
+* [Vicente Garcia] - *Lógica y Umbrales*
+* [Sarai Herrera] - *Interfaz y Actuadores (LCD y L298N)*
 
 ## 🔌 Esquema de Conexiones (Pinout)
 

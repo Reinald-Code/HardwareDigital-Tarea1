@@ -1,3 +1,4 @@
+
 // =========================================================
 // ISF-215: Tarea 1 - Hardware Digital
 // Sistema: Control de Riego con L298N y LCD 16x2
@@ -7,15 +8,15 @@
 // --- INTEGRANTE 1: Estructura base y pines ---
 // Entradas
 const int PIN_SENSOR_HUMEDAD = A0;
-const int PIN_BOTON = 2;
+const int PIN_BOTON = 6; // Botón asignado al pin 6 para liberar el pin 2
 
 // Salidas: Control del Motor (L298N)
-const int IN1 = 7; // Dirección 1
-const int IN2 = 8; // Dirección 2
-const int ENA = 9; // Enable (PWM para velocidad)
+const int IN1 = 7;  // Dirección 1
+const int IN2 = 8;  // Dirección 2
+const int ENA = 9;  // Enable (habilitar) - Control PWM
 
 // Pantalla LCD 16x2 (Pines: RS, EN, D4, D5, D6, D7)
-LiquidCrystal lcd(12, 11, 6, 5, 4, 3);
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2); 
 
 // Variables globales
 int humedadPorcentaje = 0;
@@ -24,7 +25,7 @@ bool bombaActivada = false;
 bool estadoBotonAnterior = HIGH;
 bool estadoBotonEstable = HIGH;
 unsigned long ultimoCambioBoton = 0;
-const unsigned long DEBOUNCE_MS = 50;
+const unsigned long DEBOUNCE_MS = 50; 
 
 void setup() {
   Serial.begin(9600);
@@ -53,25 +54,23 @@ void loop() {
   delay(100); 
 }
 
-// --- INTEGRANTE 2: Módulo Analógico ---
 // --- INTEGRANTE 2: Módulo Analógico para YL-69 / FC-28 ---
 void leerHumedad() {
-  // Leer y mapear valor de 0-1023 a 0-100%
-
   // Leer el valor analógico crudo del sensor
   int valorSensor = analogRead(PIN_SENSOR_HUMEDAD);
 
-  // Mapear el valor usando lógica INVERTIDA
+  // Mapear el valor usando lógica INVERTIDA corregida
   // 1023 (Tierra seca) -> 0% de humedad
   // 0 (Sumergido en agua) -> 100% de humedad
-  humedadPorcentaje = map(valorSensor, 1023, 100, 0, 0);
+  humedadPorcentaje = map(valorSensor, 1023, 0, 0, 100);
 
   // Se limita el valor para evitar porcentajes negativos o mayores a 100%
   humedadPorcentaje = constrain(humedadPorcentaje, 0, 100);
 }
-// --- INTEGRANTE 3: Módulo Digital y Debouncing ---
+
+// --- INTEGRANTE 3: Módulo Digital y Antirrebote ---
 void leerBoton() {
-  // Cambiar entre modo manual y automático con debouncing
+  // Cambiar entre modo manual y automático
   bool lecturaBoton = digitalRead(PIN_BOTON);
 
   if (lecturaBoton != estadoBotonAnterior) {
@@ -93,8 +92,7 @@ void leerBoton() {
 
 /**
  * --- INTEGRANTE 4: Lógica y Umbral ---
- * @brief Decide el estado de la bomba según el nivel de humedad y el modo de operación.
- * Si la humedad cae por debajo del 40%, se marca la bomba para ser activada.
+ * Decide el estado de la bomba según el nivel de humedad y el modo de operación.
  */
 void evaluarUmbral() {
   // Solo aplicamos la lógica automática si el Modo Manual está desactivado
@@ -108,10 +106,9 @@ void evaluarUmbral() {
       // HISTERESIS: Si ya llegó al 60%, dejamos de regar para no inundar
       bombaActivada = false;
     }
-    // Si está entre 40 y 60, mantiene el estado anterior (evita que la bomba prenda/apague muy rápido)
     
   } else {
-    // Si estamos en Modo Manual/OFF, la bomba siempre debe estar apagada por seguridad
+    // Si estamos en Modo Manual, la bomba siempre debe estar apagada por seguridad
     bombaActivada = false;
   }
 }
@@ -122,36 +119,30 @@ void actualizarPantalla() {
   // =====================================================
   // 1. Control del L298N
   // =====================================================
-
   if (bombaActivada) {
-
     // Activar motor
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, LOW);
-
-    // Velocidad mediante PWM
+    // Velocidad mediante PWM (rango de 0 a 255)
     analogWrite(ENA, 200);
 
   } else {
-
     // Detener motor
     digitalWrite(IN1, LOW);
     digitalWrite(IN2, LOW);
-
     analogWrite(ENA, 0);
   }
 
   // =====================================================
-  // 2. Mostrar datos en pantalla LCD (Corregido sin lcd.clear)
+  // 2. Mostrar datos en pantalla LCD
   // =====================================================
-
-  // Fila superior: Se agregan espacios al final para borrar números viejos sin parpadeo
+  // Fila superior: Se agregan espacios al final para borrar números viejos
   lcd.setCursor(0, 0);
   lcd.print(F("Humedad: "));
   lcd.print(humedadPorcentaje);
   lcd.print(F("%   ")); 
 
-  // Fila inferior: Se ordenan los textos en posiciones fijas
+  // Fila inferior: Textos en posiciones fijas
   lcd.setCursor(0, 1);
   if (modoManual) {
     lcd.print(F("Modo: MANUAL"));
@@ -159,7 +150,7 @@ void actualizarPantalla() {
     lcd.print(F("Modo: AUTO  "));
   }
 
-  // El estado de la bomba se imprime al lado para que no choque con el texto del modo
+  // El estado de la bomba
   if (bombaActivada) {
     lcd.print(F(" ON "));
   } else {

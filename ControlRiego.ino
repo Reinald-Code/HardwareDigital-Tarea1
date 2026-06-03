@@ -8,15 +8,22 @@
 // --- INTEGRANTE 1: Estructura base y pines ---
 // Entradas
 const int PIN_SENSOR_HUMEDAD = A0;
-const int PIN_BOTON = 6; // Botón asignado al pin 6 para liberar el pin 2
+const int PIN_BOTON = 12; 
 
 // Salidas: Control del Motor (L298N)
-const int IN1 = 7;  // Dirección 1
+const int IN1 = 9;  // Dirección 1
 const int IN2 = 8;  // Dirección 2
-const int ENA = 9;  // Enable (habilitar) - Control PWM
+const int ENA = 10;  // Enable (habilitar) - Control PWM
 
-// Pantalla LCD 16x2 (Pines: RS, EN, D4, D5, D6, D7)
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2); 
+// --- SALIDAS: PANTALLA LCD 16x2 ---
+// Agrupados secuencialmente del 7 al 2 para no cruzar cables
+const int RS = 7;
+const int EN = 6;
+const int D4 = 5;
+const int D5 = 4;
+const int D6 = 3;
+const int D7 = 2;
+LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 
 // Variables globales
 int humedadPorcentaje = 0;

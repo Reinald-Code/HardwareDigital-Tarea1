@@ -66,9 +66,7 @@ void leerHumedad() {
   // Leer el valor analógico crudo del sensor
   int valorSensor = analogRead(PIN_SENSOR_HUMEDAD);
 
-  // Mapear el valor usando lógica INVERTIDA corregida
-  // 1023 (Tierra seca) -> 0% de humedad
-  // 0 (Sumergido en agua) -> 100% de humedad
+  // Mapeo corregido: 1023 (Tierra seca) -> 0%, 0 (Agua) -> 100%
   humedadPorcentaje = map(valorSensor, 1023, 0, 0, 100);
 
   // Se limita el valor para evitar porcentajes negativos o mayores a 100%
